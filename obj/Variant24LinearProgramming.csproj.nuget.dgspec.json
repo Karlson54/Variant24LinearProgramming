@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/andrejruban/Downloads/Variant24LinearProgramming/Variant24LinearProgramming.csproj": {}
+    "C:\\Users\\Андрей\\RiderProjects\\Variant24LinearProgramming\\Variant24LinearProgramming.csproj": {}
   },
   "projects": {
-    "/Users/andrejruban/Downloads/Variant24LinearProgramming/Variant24LinearProgramming.csproj": {
+    "C:\\Users\\Андрей\\RiderProjects\\Variant24LinearProgramming\\Variant24LinearProgramming.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/andrejruban/Downloads/Variant24LinearProgramming/Variant24LinearProgramming.csproj",
+        "projectUniqueName": "C:\\Users\\Андрей\\RiderProjects\\Variant24LinearProgramming\\Variant24LinearProgramming.csproj",
         "projectName": "Variant24LinearProgramming",
-        "projectPath": "/Users/andrejruban/Downloads/Variant24LinearProgramming/Variant24LinearProgramming.csproj",
-        "packagesPath": "/Users/andrejruban/.nuget/packages/",
-        "outputPath": "/Users/andrejruban/Downloads/Variant24LinearProgramming/obj/",
+        "projectPath": "C:\\Users\\Андрей\\RiderProjects\\Variant24LinearProgramming\\Variant24LinearProgramming.csproj",
+        "packagesPath": "C:\\Users\\Андрей\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Андрей\\RiderProjects\\Variant24LinearProgramming\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/andrejruban/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Андрей\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0-windows"
@@ -38,8 +38,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.300"
+        }
       },
       "frameworks": {
         "net8.0-windows": {
@@ -70,7 +69,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "/Users/andrejruban/.dotnet/sdk/9.0.301/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Users\\Андрей\\.dotnet\\sdk\\8.0.411/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

@@ -1,20 +1,21 @@
+using System;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
 using ScottPlot;
 using ScottPlot.WinForms;
-using System.Drawing;
+using DrawingColor = System.Drawing.Color;
 
 namespace Variant24LinearProgramming;
 
 public sealed class MainForm : Form
 {
-    private readonly Color bg = ColorTranslator.FromHtml("#111318");
-    private readonly Color card = ColorTranslator.FromHtml("#1b1f26");
-    private readonly Color cardAlt = ColorTranslator.FromHtml("#232832");
-    private readonly Color textColor = ColorTranslator.FromHtml("#e7eaf0");
-    private readonly Color muted = ColorTranslator.FromHtml("#8d96a6");
-    private readonly Color blue = ColorTranslator.FromHtml("#8aa4d6");
-    private readonly Color orange = ColorTranslator.FromHtml("#c9a875");
-    private readonly Color green = ColorTranslator.FromHtml("#81b29a");
-    private readonly Color grid = ColorTranslator.FromHtml("#303641");
+    private readonly DrawingColor bg = ColorTranslator.FromHtml("#111318");
+    private readonly DrawingColor card = ColorTranslator.FromHtml("#1b1f26");
+    private readonly DrawingColor cardAlt = ColorTranslator.FromHtml("#232832");
+    private readonly DrawingColor textColor = ColorTranslator.FromHtml("#e7eaf0");
+    private readonly DrawingColor muted = ColorTranslator.FromHtml("#8d96a6");
+    private readonly DrawingColor grid = ColorTranslator.FromHtml("#303641");
 
     private readonly Solution solution = LinearProgramSolver.Solve();
     private readonly FormsPlot graph = new() { Dock = DockStyle.Fill };
@@ -37,13 +38,13 @@ public sealed class MainForm : Form
     private void BuildLayout()
     {
         var header = new Panel { Dock = DockStyle.Top, Height = 76, BackColor = bg, Padding = new Padding(28, 16, 28, 10) };
-        header.Controls.Add(new Label
+        header.Controls.Add(new System.Windows.Forms.Label
         {
             Text = "Контрольна робота · Варіант 24",
             Dock = DockStyle.Left, AutoSize = false, Width = 650,
             Font = new Font("Segoe UI Semibold", 24), ForeColor = textColor, TextAlign = ContentAlignment.MiddleLeft
         });
-        header.Controls.Add(new Label
+        header.Controls.Add(new System.Windows.Forms.Label
         {
             Text = "Метод лінійного програмування",
             Dock = DockStyle.Right, Width = 350, ForeColor = muted,
@@ -69,12 +70,12 @@ public sealed class MainForm : Form
         leftContent.RowStyles.Add(new RowStyle(SizeType.Absolute, 42));
         leftContent.RowStyles.Add(new RowStyle(SizeType.Absolute, 128));
         leftContent.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-        leftContent.Controls.Add(new Label
+        leftContent.Controls.Add(new System.Windows.Forms.Label
         {
             Text = "Покрокове розв’язання", Dock = DockStyle.Fill,
             Font = new Font("Segoe UI Semibold", 18), ForeColor = textColor, TextAlign = ContentAlignment.MiddleLeft
         }, 0, 0);
-        leftContent.Controls.Add(new Label
+        leftContent.Controls.Add(new System.Windows.Forms.Label
         {
             Text = "Z = 2x₁ + 5x₂ → min\r\n7x₁ + 2x₂ ≥ 14\r\n5x₁ + 6x₂ ≤ 60\r\n3x₁ + 8x₂ ≥ 24\r\nx₁ ≥ 0; x₂ ≥ 0",
             Dock = DockStyle.Fill, BackColor = cardAlt, ForeColor = textColor,
@@ -97,7 +98,7 @@ public sealed class MainForm : Form
         var graphLayout = new TableLayoutPanel { Dock = DockStyle.Fill, RowCount = 2, ColumnCount = 1, BackColor = card };
         graphLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 40));
         graphLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-        graphLayout.Controls.Add(new Label
+        graphLayout.Controls.Add(new System.Windows.Forms.Label
         {
             Text = "Графічний розв’язок", Dock = DockStyle.Fill,
             Font = new Font("Segoe UI Semibold", 17), ForeColor = textColor, TextAlign = ContentAlignment.MiddleLeft
@@ -111,7 +112,7 @@ public sealed class MainForm : Form
         var tableLayout = new TableLayoutPanel { Dock = DockStyle.Fill, RowCount = 2, ColumnCount = 1, BackColor = card };
         tableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 36));
         tableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-        tableLayout.Controls.Add(new Label
+        tableLayout.Controls.Add(new System.Windows.Forms.Label
         {
             Text = "Таблиця вершин допустимої області", Dock = DockStyle.Fill,
             Font = new Font("Segoe UI Semibold", 15), ForeColor = textColor, TextAlign = ContentAlignment.MiddleLeft
@@ -124,7 +125,7 @@ public sealed class MainForm : Form
         var answer = MakeCard();
         answer.BackColor = ColorTranslator.FromHtml("#252e3f");
         answer.Padding = new Padding(22);
-        answer.Controls.Add(new Label
+        answer.Controls.Add(new System.Windows.Forms.Label
         {
             Dock = DockStyle.Fill,
             Text = $"ВІДПОВІДЬ\r\nОптимальний план: x₁ = {Point2.Format(solution.Optimum.Point.X)}, x₂ = {Point2.Format(solution.Optimum.Point.Y)}\r\nZmin = {Point2.Format(solution.Optimum.Z)}",
@@ -182,12 +183,15 @@ public sealed class MainForm : Form
         plt.Grid.MinorLineColor = ScottPlot.Color.FromHex("#252a33");
         plt.Grid.MajorLineWidth = 1;
 
-        // Boundary lines clipped to the displayed coordinate window.
+        // Обмеження:
+        // 7x1 + 2x2 = 14 => при x1=0, x2=7; при x1=2, x2=0
         AddLine(plt, new[] { 0.0, 2.0 }, new[] { 7.0, 0.0 }, "#8aa4d6", "7x₁ + 2x₂ = 14");
+        // 5x1 + 6x2 = 60 => при x1=0, x2=10; при x1=12, x2=0
         AddLine(plt, new[] { 0.0, 12.0 }, new[] { 10.0, 0.0 }, "#c9a875", "5x₁ + 6x₂ = 60");
+        // 3x1 + 8x2 = 24 => при x1=0, x2=3; при x1=8, x2=0
         AddLine(plt, new[] { 0.0, 8.0 }, new[] { 3.0, 0.0 }, "#81b29a", "3x₁ + 8x₂ = 24");
 
-        // Outline the feasible polygon in its boundary order.
+        // Багатокутник допустимої області
         var polygon = new[]
         {
             new Point2(0, 7),
@@ -201,30 +205,34 @@ public sealed class MainForm : Form
         var py = polygon.Select(p => p.Y).ToArray();
         var outline = plt.Add.Scatter(px, py);
         outline.Color = ScottPlot.Color.FromHex("#81b29a");
-        outline.LineWidth = 2.5;
+        outline.LineWidth = 2.5f;
         outline.MarkerSize = 0;
 
         foreach (var v in solution.Vertices)
         {
             var s = plt.Add.Scatter(new[] { v.Point.X }, new[] { v.Point.Y });
-            s.Color = Math.Abs(v.Z - solution.Optimum.Z) < 1e-8
+            bool isOptimum = Math.Abs(v.Z - solution.Optimum.Z) < 1e-8;
+            s.Color = isOptimum
                 ? ScottPlot.Color.FromHex("#c9a875")
                 : ScottPlot.Color.FromHex("#8aa4d6");
-            s.MarkerSize = Math.Abs(v.Z - solution.Optimum.Z) < 1e-8 ? 12 : 8;
+            s.MarkerSize = isOptimum ? 12 : 8;
             s.LineWidth = 0;
-            var label = plt.Add.Text($"{v.Point}", v.Point.X + 0.15, v.Point.Y + 0.25);
+
+            var label = plt.Add.Text($"{v.Name}{v.Point}", v.Point.X + 0.15, v.Point.Y + 0.25);
             label.LabelFontColor = ScottPlot.Color.FromHex("#e7eaf0");
-            label.LabelFontSize = 11;
+            label.LabelFontSize = 11f;
         }
 
+        // Лінія цільової функції у точці оптимуму Zmin
         var objective = plt.Add.Scatter(new[] { 0.0, 4.0 }, new[] { solution.Optimum.Z / 5.0, (solution.Optimum.Z - 8.0) / 5.0 });
         objective.Color = ScottPlot.Color.FromHex("#c9a875");
-        objective.LineWidth = 1.5;
+        objective.LineWidth = 1.5f;
         objective.LinePattern = ScottPlot.LinePattern.Dashed;
 
-        plt.Title("Допустима область та вершини", size: 14, color: ScottPlot.Color.FromHex("#e7eaf0"));
-        plt.XLabel("x₁", color: ScottPlot.Color.FromHex("#e7eaf0"));
-        plt.YLabel("x₂", color: ScottPlot.Color.FromHex("#e7eaf0"));
+        plt.Title("Допустима область та вершини");
+        plt.XLabel("x₁");
+        plt.YLabel("x₂");
+
         plt.Axes.SetLimits(-0.7, 13, -0.7, 11);
         graph.Refresh();
     }
@@ -233,10 +241,10 @@ public sealed class MainForm : Form
     {
         var s = plt.Add.Scatter(xs, ys);
         s.Color = ScottPlot.Color.FromHex(color);
-        s.LineWidth = 2;
+        s.LineWidth = 2f;
         s.MarkerSize = 0;
         var text = plt.Add.Text(label, xs[0] + 0.3, ys[0] - 0.35);
         text.LabelFontColor = ScottPlot.Color.FromHex(color);
-        text.LabelFontSize = 10;
+        text.LabelFontSize = 10f;
     }
 }
